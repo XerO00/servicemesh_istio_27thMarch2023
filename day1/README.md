@@ -179,6 +179,42 @@ data plane version: 1.17.1 (1 proxies)
 ✔ ClusterRoleBinding: istio-reader-istio-system.istio-system checked 
 ```
 
+### Understanding istio ingress controller -- istio ingressgateway 
+
+<img src="gw.png">
+
+### verify it 
+
+```
+[ashu@ip-172-31-32-172 ~]$ kubectl  get ns
+NAME              STATUS   AGE
+default           Active   4h23m
+istio-system      Active   32m
+kube-node-lease   Active   4h23m
+kube-public       Active   4h23m
+kube-system       Active   4h23m
+[ashu@ip-172-31-32-172 ~]$ 
+[ashu@ip-172-31-32-172 ~]$ 
+[ashu@ip-172-31-32-172 ~]$ kubectl  get  deploy -n  istio-system
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+istio-ingressgateway   1/1     1            1           32m
+istiod                 1/1     1            1           33m
+[ashu@ip-172-31-32-172 ~]$ 
+[ashu@ip-172-31-32-172 ~]$ kubectl  get  po  -n  istio-system
+NAME                                    READY   STATUS    RESTARTS   AGE
+istio-ingressgateway-647966f79b-2dfjr   1/1     Running   0          33m
+istiod-b7665cfd8-zsjjl                  1/1     Running   0          33m
+[ashu@ip-172-31-32-172 ~]$ 
+[ashu@ip-172-31-32-172 ~]$ kubectl  get  svc  -n  istio-system
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP                                                                PORT(S)                                      AGE
+istio-ingressgateway   LoadBalancer   10.100.142.23    ac80ade540ae9431087187d82e4ee4ec-1788128451.ap-south-1.elb.amazonaws.com   15021:31336/TCP,80:31766/TCP,443:30756/TCP   33m
+istiod                 ClusterIP      10.100.194.141   <none>                                                                     15010/TCP,15012/TCP,443/TCP,15014/TCP        33m
+[ashu@ip-172-31-32-172 ~]$ 
+
+
+```
+
+
 
 
 
