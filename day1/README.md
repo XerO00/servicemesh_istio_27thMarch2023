@@ -92,6 +92,14 @@ LICENSE  README.md  bin  manifest.yaml  manifests  samples  tools
 [root@ip-172-31-32-172 istio-1.17.1]# pwd
 /opt/istio-1.17.1
 [root@ip-172-31-32-172 istio-1.17.1]# vim ~/.bashrc 
+
+===
+
+ISTIO_HOME=/opt/istio-1.17.1
+PATH=$PATH:$ISTIO_HOME/bin
+export PATH
+===
+
 [root@ip-172-31-32-172 istio-1.17.1]# source ~/.bashrc 
 [root@ip-172-31-32-172 istio-1.17.1]# 
 [root@ip-172-31-32-172 istio-1.17.1]# istioctl  version 
@@ -113,6 +121,65 @@ This will install the Istio 1.17.1 default profile with ["Istio core" "Istiod" "
 Thank you for installing Istio 1.17.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/hMHGiwZHPU7UQRWe9
 
 ```
+
+### verify it 
+
+```
+[ashu@ip-172-31-32-172 ~]$ kubectl   get  ns
+NAME              STATUS   AGE
+default           Active   3h54m
+istio-system      Active   4m12s
+kube-node-lease   Active   3h54m
+kube-public       Active   3h54m
+kube-system       Active   3h54m
+
+```
+
+### more things 
+
+```
+[ashu@ip-172-31-32-172 ~]$ kubectl  get  po -n istio-system 
+NAME                                    READY   STATUS    RESTARTS   AGE
+istio-ingressgateway-647966f79b-2dfjr   1/1     Running   0          5m1s
+istiod-b7665cfd8-zsjjl                  1/1     Running   0          5m11s
+[ashu@ip-172-31-32-172 ~]$ kubectl  get  deploy -n istio-system 
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+istio-ingressgateway   1/1     1            1           6m10s
+istiod                 1/1     1            1           6m20s
+[ashu@ip-172-31-32-172 ~]$ 
+
+
+```
+
+### 
+
+```
+[ashu@ip-172-31-32-172 ~]$ istioctl  version 
+client version: 1.17.1
+control plane version: 1.17.1
+data plane version: 1.17.1 (1 proxies)
+[ashu@ip-172-31-32-172 ~]$ 
+
+```
+
+### finally verification of istioctl 
+
+```
+[ashu@ip-172-31-32-172 ~]$ istioctl   verify-install
+1 Istio control planes detected, checking --revision "default" only
+✔ HorizontalPodAutoscaler: istio-ingressgateway.istio-system checked successfully
+✔ Deployment: istio-ingressgateway.istio-system checked successfully
+✔ PodDisruptionBudget: istio-ingressgateway.istio-system checked successfully
+✔ Role: istio-ingressgateway-sds.istio-system checked successfully
+✔ RoleBinding: istio-ingressgateway-sds.istio-system checked successfully
+✔ Service: istio-ingressgateway.istio-system checked successfully
+✔ ServiceAccount: istio-ingressgateway-service-account.istio-system checked successfully
+✔ ClusterRole: istiod-istio-system.istio-system checked successfully
+✔ ClusterRole: istio-reader-istio-system.istio-system checked successfully
+✔ ClusterRoleBinding: istio-reader-istio-system.istio-system checked 
+```
+
+
 
 
 
