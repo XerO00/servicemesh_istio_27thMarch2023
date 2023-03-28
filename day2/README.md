@@ -85,8 +85,45 @@ ashu-webapp-54d487cf97-577fv   1/1     Running   0          21s
 [ashu@ip-172-31-32-172 ashu-application]$ 
 
 
+```
+
+## istio will not be injecting any envoy proxy by default 
+
+### label our target namespaces where we want istio to enject envoy proxy 
+
+<img src="ns1.png">
+
+### assinging label 
 
 ```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  label namespaces ashu-apps  istio-injection=enabled 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get ns  ashu-apps --show-labels
+NAME        STATUS   AGE   LABELS
+ashu-apps   Active   30m   istio-injection=enabled,kubernetes.io/metadata.name=ashu-apps
+[ashu@ip-172-31-32-172 ashu-application]$ 
+```
+
+### redeploy it again 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  delete  -f ashu-deploy.yaml 
+deployment.apps "ashu-webapp" deleted
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply   -f ashu-deploy.yaml 
+deployment.apps/ashu-webapp created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get deploy 
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-webapp   1/1     1            1           8s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl   get po
+NAME                           READY   STATUS    RESTARTS   AGE
+ashu-webapp-54d487cf97-bgjd5   2/2     Running   0          13s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+
+
+```
+
+
+
 
 
 
