@@ -173,6 +173,37 @@ ashu-webapp-54d487cf97-bgjd5   2/2     Running   0          35m   192.168.4.66  
 [ashu@ip-172-31-32-172 ashu-application]$ 
 ```
 
+## using Istio-ingressgateway instead of nginx ingress controller 
+
+<img src="isgw.png">
+
+### checking istio-gw
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get deploy -n istio-system 
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+istio-ingressgateway   1/1     1            1           3h14m
+istiod                 1/1     1            1           3h14m
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get svc  -n istio-system 
+'NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)                                      AGE
+istio-ingressgateway   LoadBalancer   10.100.45.173   a953a6892252643f0863bc71c347ffba-784553568.ap-south-1.elb.amazonaws.com   15021:31678/TCP,80:31579/TCP,443:31970/TCP   3h19m
+istiod                 ClusterIP      10.100.237.34   <none>                                                                    15010/TCP,15012/TCP,443/TCP,15014/TCP        3h19m
+[ashu@ip-172-31-32-172 ashu-application]$ '
+
+```
+
+### to Implement application access from outside -- via Istio we have to create two new CRD's 
+
+<ol>
+  <li> Istio gateway resources </li>
+  <li> Virtual services resource </li>
+</ol>
+
+<img src="vsgw.png">
+
+
+
 
 
 
