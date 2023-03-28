@@ -122,6 +122,56 @@ ashu-webapp-54d487cf97-bgjd5   2/2     Running   0          13s
 
 ```
 
+### scaling will also be having injection 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  scale deploy ashu-webapp  --replicas 3
+deployment.apps/ashu-webapp scaled
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get po
+NAME                           READY   STATUS            RESTARTS   AGE
+ashu-webapp-54d487cf97-bgjd5   2/2     Running           0          13m
+ashu-webapp-54d487cf97-brhpv   0/2     PodInitializing   0          2s
+ashu-webapp-54d487cf97-lr4tm   0/2     PodInitializing   0          2s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get po
+NAME                           READY   STATUS    RESTARTS   AGE
+ashu-webapp-54d487cf97-bgjd5   2/2     Running   0          13m
+ashu-webapp-54d487cf97-brhpv   2/2     Running   0          10s
+ashu-webapp-54d487cf97-lr4tm   2/2     Running   0          10s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  scale deploy ashu-webapp  --replicas 1
+deployment.apps/ashu-webapp scaled
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get po
+NAME                           READY   STATUS        RESTARTS   AGE
+ashu-webapp-54d487cf97-bgjd5   2/2     Running       0          14m
+ashu-webapp-54d487cf97-brhpv   2/2     Terminating   0          68s
+ashu-webapp-54d487cf97-lr4tm   2/2     Terminating   
+```
+
+## Understanding Ingress 
+
+<img src="ing.png">
+
+
+### creating clusterip type service in k8s deployment 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get deploy 
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-webapp   1/1     1            1           34m
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  expose  deployment  ashu-webapp  --type ClusterIP --port 80 --name ashu-svc1 --dry-run=client -o yaml  >ui_svc.yaml 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f ui_svc.yaml 
+service/ashu-svc1 created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  svc
+NAME        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+ashu-svc1   ClusterIP   10.100.58.212   <none>        80/TCP    3s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl   get  ep 
+NAME        ENDPOINTS         AGE
+ashu-svc1   192.168.4.66:80   15s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  po -o wide
+NAME                           READY   STATUS    RESTARTS   AGE   IP             NODE                                           NOMINATED NODE   READINESS GATES
+ashu-webapp-54d487cf97-bgjd5   2/2     Running   0          35m   192.168.4.66   ip-192-168-17-96.ap-south-1.compute.internal   <none>           <none>
+[ashu@ip-172-31-32-172 ashu-application]$ 
+```
 
 
 
