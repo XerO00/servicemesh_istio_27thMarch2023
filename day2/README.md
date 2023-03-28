@@ -203,6 +203,40 @@ istiod                 ClusterIP      10.100.237.34   <none>                    
 <img src="vsgw.png">
 
 
+### creating custom istio-gateway resource  to filter a particular webapp url / uri
+
+### 
+
+```
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: ashu-gateway # name of istio gateway 
+  namespace: ashu-apps # namespace where i want to deploy istio gateway 
+spec:
+  selector:  # to find the ingress controller out of any like nginx , istio , kong , haproxy 
+    istio: ingressgateway # label of istio-ingressgateway which is running in istio-system  
+  servers:
+  - port: # to filter a particular protocol or ports
+      number: 80
+      name: http 
+      protocol: HTTP
+    hosts: # the application URL for which i am searching header 
+    - me.ashutoshh.in 
+```
+
+### lets deploy it 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f  ashu_istio_gateway.yaml  
+gateway.networking.istio.io/ashu-gateway created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  gateway
+NAME           AGE
+ashu-gateway   8s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  gw
+NAME           AGE
+ashu-gateway   12s
+```
 
 
 
