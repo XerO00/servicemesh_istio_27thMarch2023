@@ -238,6 +238,48 @@ NAME           AGE
 ashu-gateway   12s
 ```
 
+### Deploying virtual service to forward traffic to k8s service 
+
+<img src="vs.png">
+
+### creating vs 
+
+```
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ashu-vs-routing-rule # name of routing rule
+  namespace: ashu-apps  # namespace info 
+spec:
+  gateways:
+  - ashu-gateway
+  hosts:
+  - me.ashutoshh.in
+  http:
+  - route: 
+    - destination:
+        host: ashu-svc1 # service name of k8s 
+        port:
+          number: 80
+```
+
+### lets do this 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl apply -f ashu_virtual_svc.yaml 
+virtualservice.networking.istio.io/ashu-vs-routing-rule created
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get virtualservices
+NAME                   GATEWAYS           HOSTS                 AGE
+ashu-vs-routing-rule   ["ashu-gateway"]   ["me.ashutoshh.in"]   14s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get vs
+NAME                   GATEWAYS           HOSTS                 AGE
+ashu-vs-routing-rule   ["ashu-gateway"]   ["me.ashutoshh.in"]   19s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+
+```
+
+
 
 
 
