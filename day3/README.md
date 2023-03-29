@@ -82,3 +82,38 @@ reviews-v3-c9c4fb987-gd74h       2/2     Running           0          7s
 [ashu@ip-172-31-32-172 ashu-application]$ 
 ```
 
+### Expose webapp outside k8s cluster 
+
+### creating istio-gateway CRD 
+
+```
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: ashu-micro-app-gw # name of my istio gateway to handle network filter
+  namespace: ashu-webapp 
+spec:
+  selector: # for selecting the ingress controller out of nginx , istio , kong , ha proxy 
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - me.ashutoshh.in
+```
+
+### lets deploy it 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ ls
+ashu-deploy.yaml  ashu_istio_gateway.yaml  ashu_virtual_svc.yaml  micro-service  ui_svc.yaml
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f micro-service/ashu-istiogateway.yaml 
+gateway.networking.istio.io/ashu-micro-app-gw created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  gw 
+NAME                AGE
+ashu-micro-app-gw   3s
+```
+
+
