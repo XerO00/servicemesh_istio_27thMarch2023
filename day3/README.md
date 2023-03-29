@@ -121,4 +121,51 @@ ashu-micro-app-gw   3s
 <img src="vsu.png">
 
 
+### creating virtual service only for product micro service component 
+
+```
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ashu-vs-routing-rule # name of routing rule
+  namespace: ashu-webapp  # namespace info 
+spec:
+  gateways: # name of gateway 
+  - ashu-micro-app-gw
+  hosts:
+  - me.ashutoshh.in
+  http:
+  - match: # figure out redirection urls /login
+    - uri:
+        exact: /productpage
+    - uri:
+        prefix: /static
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri: 
+        prefix: /api/v1/products
+    route:  # redirect to below service 
+    - destination:
+        host: productpage # service name of frontpage micro service 
+        port:
+          number: 9080
+```
+
+### depoy it 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f micro-service/ashu-home-vs.yaml 
+virtualservice.networking.istio.io/ashu-vs-routing-rule created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get gw
+NAME                AGE
+ashu-micro-app-gw   76m
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  vs
+NAME                   GATEWAYS                HOSTS                 AGE
+ashu-vs-routing-rule   ["ashu-micro-app-gw"]   ["me.ashutoshh.in"]   7s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+
+```
+
 
