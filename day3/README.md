@@ -168,4 +168,14 @@ ashu-vs-routing-rule   ["ashu-micro-app-gw"]   ["me.ashutoshh.in"]   7s
 
 ```
 
+### Natural nature of k8s service to distribute traffic to all the version of app using label selector conectp 
+
+<img src="lb.png">
+
+### introduction Destination rules CRD by ISTIO in k8s 
+
+<img src="dst.png">
+
+
+
 
