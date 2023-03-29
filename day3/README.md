@@ -116,4 +116,9 @@ NAME                AGE
 ashu-micro-app-gw   3s
 ```
 
+### Understanding traffic routing by virtual service -- redirect to home page micro service
+
+<img src="vsu.png">
+
+
 
