@@ -176,6 +176,94 @@ ashu-vs-routing-rule   ["ashu-micro-app-gw"]   ["me.ashutoshh.in"]   7s
 
 <img src="dst.png">
 
+## Observability and monitoring using Istio -- with addons/plugin -- Kiali --
+
+### setup 
+
+```
+[root@ip-172-31-32-172 ~]# cd /opt/istio-1.17.1/
+[root@ip-172-31-32-172 istio-1.17.1]# ls
+LICENSE  README.md  bin  manifest.yaml  manifests  samples  tools
+[root@ip-172-31-32-172 istio-1.17.1]# 
+[root@ip-172-31-32-172 istio-1.17.1]# cd manifests/
+[root@ip-172-31-32-172 manifests]# ls
+charts  examples  profiles
+[root@ip-172-31-32-172 manifests]# cd ../samples/
+[root@ip-172-31-32-172 samples]# ls
+README.md  certs             extauthz   health-check  jwt-server    open-telemetry  security  wasm_modules
+addons     cicd              external   helloworld    kind-lb       operator        sleep     websockets
+bookinfo   custom-bootstrap  grpc-echo  httpbin       multicluster  ratelimit       tcp-echo
+[root@ip-172-31-32-172 samples]# ls  addons/
+README.md  extras  grafana.yaml  jaeger.yaml  kiali.yaml  prometheus.yaml
+[root@ip-172-31-32-172 samples]# 
+[root@ip-172-31-32-172 samples]# ls  addons/extras/
+prometheus-operator.yaml  prometheus_vm.yaml  prometheus_vm_tls.yaml  skywalking.yaml  zipkin.yaml
+[root@ip-172-31-32-172 samples]# kubectl apply -f addons/
+serviceaccount/grafana created
+configmap/grafana created
+service/grafana created
+deployment.apps/grafana created
+configmap/istio-grafana-dashboards created
+configmap/istio-services-grafana-dashboards created
+deployment.apps/jaeger created
+service/tracing created
+service/zipkin created
+service/jaeger-collector created
+serviceaccount/kiali created
+configmap/kiali created
+clusterrole.rbac.authorization.k8s.io/kiali-viewer created
+clusterrole.rbac.authorization.k8s.io/kiali created
+clusterrolebinding.rbac.authorization.k8s.io/kiali created
+role.rbac.authorization.k8s.io/kiali-controlplane created
+rolebinding.rbac.authorization.k8s.io/kiali-controlplane created
+service/kiali created
+deployment.apps/kiali created
+serviceaccount/prometheus created
+configmap/prometheus created
+clusterrole.rbac.authorization.k8s.io/prometheus created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus created
+service/prometheus created
+deployment.apps/prometheus created
+
+```
+
+### verify 
+
+```
+ashu@ip-172-31-32-172 ashu-application]$ kubectl  get deploy
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+details-v1       1/1     1            1           126m
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  deploy -n istio-system 
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+grafana                1/1     1            1           35s
+istio-ingressgateway   1/1     1            1           6h13m
+istiod                 1/1     1            1           6h13m
+jaeger                 1/1     1            1           35s
+kiali                  1/1     1            1           35s
+prometheus             1/1     1            1           35s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  po  -n istio-system 
+NAME                                    READY   STATUS    RESTARTS   AGE
+grafana-56bdf8bf85-bldfw                1/1     Running   0          71s
+istio-ingressgateway-647966f79b-scr9b   1/1     Running   0          6h13m
+istiod-b7665cfd8-nrgs5                  1/1     Running   0          6h13m
+jaeger-76cd7c7566-fgx99                 1/1     Running   0          71s
+kiali-7d7df7458c-z97hx                  1/1     Running   0          71s
+prometheus-85949fddb-89588              2/2     Running   0          71s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get  svc  -n istio-system 
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                                      AGE
+grafana                ClusterIP      10.100.49.216    <none>                                                                    3000/TCP                                     77s
+istio-ingressgateway   LoadBalancer   10.100.102.226   a8efe2c24e0d84e3299de3e4740c5831-791255915.ap-south-1.elb.amazonaws.com   15021:31285/TCP,80:32156/TCP,443:31737/TCP   6h13m
+istiod                 ClusterIP      10.100.86.204    <none>                                                                    15010/TCP,15012/TCP,443/TCP,15014/TCP        6h14m
+jaeger-collector       ClusterIP      10.100.120.187   <none>                                                                    14268/TCP,14250/TCP,9411/TCP                 77s
+kiali                  ClusterIP      10.100.189.86    <none>                                                                    20001/TCP,9090/TCP                           77s
+prometheus             ClusterIP      10.100.175.90    <none>                                                                    9090/TCP                                     77s
+tracing                ClusterIP      10.100.16.228    <none>                                                                    80/TCP,16685/TCP                             77s
+zipkin                 ClusterIP      10.100.189.198   <none>                                                                    9411/TCP                                     77s
+```
+
+
 
 
 
