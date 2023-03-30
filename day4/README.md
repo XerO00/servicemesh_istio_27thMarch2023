@@ -118,6 +118,8 @@ spec:
       version:  v3 
 ```
 
+
+
 ### deploy it 
 
 ```
@@ -129,4 +131,52 @@ error: the server doesn't have a resource type "dst"
 NAME          HOST                                    AGE
 ashu-review   reviews.ashu-webapp.svc.cluster.local   13s
 ```
+
+### How traffic spliting will be done in Istio -- using Virtual service 
+
+<img src="vstf.png">
+
+### deploy it 
+
+### YAML
+
+```
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ashu-review-traffic-split
+  namespace: ashu-webapp
+spec:
+  hosts:
+  - reviews.ashu-webapp.svc.cluster.local
+  http:
+  - route: 
+    - destination:
+        subset: group1
+        host: reviews  # many time we are having different service name also under same label
+      weight: 70
+    - destination:
+        subset: group2 
+        host: reviews
+      weight: 20
+    - destination:
+        subset: group3 
+        host: reviews
+      weight: 10 
+```
+
+### deploy it 
+
+```
+[ashu@ip-172-31-32-172 micro-service]$ kubectl  apply -f vs_for_traffic_split.yaml 
+virtualservice.networking.istio.io/ashu-review-traffic-split created
+[ashu@ip-172-31-32-172 micro-service]$ kubectl  get  vs
+NAME                        GATEWAYS                HOSTS                                       AGE
+ashu-review-traffic-split                           ["reviews.ashu-webapp.svc.cluster.local"]   4s
+ashu-vs-routing-rule        ["ashu-micro-app-gw"]   ["me.ashutoshh.in"]                         3h38m
+[ashu@ip-172-31-32-172 micro-service]$ 
+
+
+```
+
 
