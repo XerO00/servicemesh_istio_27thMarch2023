@@ -179,4 +179,41 @@ ashu-vs-routing-rule        ["ashu-micro-app-gw"]   ["me.ashutoshh.in"]         
 
 ```
 
+### user based traffic customize 
+
+```
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ashu-review-traffic-split
+  namespace: ashu-webapp
+spec:
+  hosts:
+  - reviews.ashu-webapp.svc.cluster.local
+  http:
+  - match: 
+    - headers:
+        end-user: # variable used by developer to store user info 
+          exact: ashutosh
+    route: 
+    - destination:
+        subset: group3 
+        host: reviews.ashu-webapp.svc.cluster.local
+      weight: 100
+  - route: 
+    - destination:
+        subset: group1
+        host: reviews.ashu-webapp.svc.cluster.local  # many time we are having different service name also under same label
+      weight: 70
+    - destination:
+        subset: group2 
+        host: reviews.ashu-webapp.svc.cluster.local
+      weight: 30
+    
+    
+     
+```
+
+### 
+
 
