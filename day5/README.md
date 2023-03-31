@@ -264,6 +264,39 @@ NAME            AGE
 ashu-deny-all   12s
 ```
 
+### ALlow product page 
+
+```
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: ashu-product-msvc-allow
+  namespace: ashu-webapp
+spec: # selecting all 
+  selector: 
+    matchLabels: # selecting product page 
+      app: productpage
+  action: ALLOW
+  rules:
+  - to:
+     - operation:
+        methods: ["GET"]
+```
+
+### deploy it 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f micro-service/allow_product.yaml 
+authorizationpolicy.security.istio.io/ashu-product-msvc-allow created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get AuthorizationPolicy
+NAME                      AGE
+ashu-deny-all             11m
+ashu-product-msvc-allow   18s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+
+
+```
+
 
 
 
