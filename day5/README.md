@@ -225,6 +225,21 @@ curl: (56) Recv failure: Connection reset by peer
 istio-proxy@httpbin-65895fd745-cc8fx:/$ 
 ```
 
+### Implement Entire mesh as mtls 
+
+```
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: ashu-mtls1
+  namespace: istio-system # entire mesh as mtls 
+spec:
+  mtls:
+    mode: STRICT 
+```
+
+
+
 
 
 
