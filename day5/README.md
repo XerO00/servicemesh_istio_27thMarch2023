@@ -85,3 +85,9 @@ spec:
   
 ```
 
+### SSL understanding 
+
+<img src="ssl.png">
+
+
+
