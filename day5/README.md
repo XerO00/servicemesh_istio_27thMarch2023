@@ -89,5 +89,47 @@ spec:
 
 <img src="ssl.png">
 
+### CA as Istiod and istio-agent 
+
+<img src="ca.png">
+
+### testing app communication without mutual TLS -- outside namespace 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  create  ns  ashu-app-access 
+namespace/ashu-app-access created
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f <(istioctl kube-inject -f /tmp/httpbin.yaml) -n  ashu-app-access  serviceaccount/httpbin created
+service/httpbin created
+deployment.apps/httpbin created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get po -n ashu-app-access 
+NAME                       READY   STATUS            RESTARTS   AGE
+httpbin-65895fd745-cc8fx   0/2     PodInitializing   0          12s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+
+```
+
+### From other namespace i am access productpage via envoy proxy container 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get po -n ashu-app-access 
+NAME                       READY   STATUS    RESTARTS   AGE
+httpbin-65895fd745-cc8fx   2/2     Running   0          5m15s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  -n  ashu-app-access  exec -it  httpbin-65895fd745-cc8fx  -c istio-proxy  -- bash 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.cluster.local:9080  
+<!DOCTYPE html>
+<html>
+  <head>
+```
+
+
+
+
+
 
 
