@@ -238,6 +238,33 @@ spec:
     mode: STRICT 
 ```
 
+### authorization in Istio 
+
+<img src="auth.png">
+
+==== # Deny all policy 
+
+```
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: ashu-deny-all
+  namespace: ashu-webapp
+spec: # selecting all 
+  {}
+```
+
+### deploy it 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f micro-service/ashu-app_block_all.yaml 
+authorizationpolicy.security.istio.io/ashu-deny-all created
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get AuthorizationPolicy
+NAME            AGE
+ashu-deny-all   12s
+```
+
+
 
 
 
