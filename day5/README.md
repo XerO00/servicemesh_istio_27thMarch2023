@@ -127,6 +127,82 @@ istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.
   <head>
 ```
 
+### Implementing mutual tls in istio 
+
+<img src="mtls.png">
+
+### creating for particular micro service 
+
+```
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: ashu-mtls1
+  namespace: ashu-webapp
+spec:
+  selector:
+    matchLabels:
+      app: details
+      version: v11
+  mtls:
+    mode: STRICT 
+    
+```
+
+### or to implement in Entire namespace 
+
+```
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: ashu-mtls1
+  namespace: ashu-webapp
+spec:
+  mtls:
+    mode: STRICT 
+```
+
+### lets do that 
+
+```
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  apply -f micro-service/ashu-mtls.yaml 
+peerauthentication.security.istio.io/ashu-mtls1 created
+[ashu@ip-172-31-32-172 ashu-application]$ 
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get peerauthentication
+NAME         MODE     AGE
+ashu-mtls1   STRICT   18s
+[ashu@ip-172-31-32-172 ashu-application]$ kubectl  get pa
+NAME         MODE     AGE
+ashu-mtls1   STRICT   22s
+[ashu@ip-172-31-32-172 ashu-application]$ 
+
+```
+
+## Note; istio related kubernetes CRD list 
+
+```
+ashu@ip-172-31-32-172 ~]$ kubectl  api-resources   |  grep -i istio
+wasmplugins                                    extensions.istio.io/v1alpha1           true         WasmPlugin
+istiooperators                    iop,io       install.istio.io/v1alpha1              true         IstioOperator
+destinationrules                  dr           networking.istio.io/v1beta1            true         DestinationRule
+envoyfilters                                   networking.istio.io/v1alpha3           true         EnvoyFilter
+gateways                          gw           networking.istio.io/v1beta1            true         Gateway
+proxyconfigs                                   networking.istio.io/v1beta1            true         ProxyConfig
+serviceentries                    se           networking.istio.io/v1beta1            true         ServiceEntry
+sidecars                                       networking.istio.io/v1beta1            true         Sidecar
+virtualservices                   vs           networking.istio.io/v1beta1            true         VirtualService
+workloadentries                   we           networking.istio.io/v1beta1            true         WorkloadEntry
+workloadgroups                    wg           networking.istio.io/v1beta1            true         WorkloadGroup
+authorizationpolicies                          security.istio.io/v1                   true         AuthorizationPolicy
+peerauthentications               pa           security.istio.io/v1beta1              true         PeerAuthentication
+requestauthentications            ra           security.istio.io/v1                   true         RequestAuthentication
+telemetries                       telemetry    telemetry.istio.io/v1alpha1            true         Telemetry
+[ashu@ip-172-31-32-172 ~]$ 
+
+
+```
+
+
 
 
 
