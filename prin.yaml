@@ -1,0 +1,17 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: ashu-details-msvc-allow1
+  namespace: ashu-webapp
+spec: # selecting all 
+  selector: 
+    matchLabels: # selecting details 
+      app: details
+  action: ALLOW
+  rules:
+  - to:
+     - operation:
+        methods: ["GET"]
+    from:
+    - source:
+        principals: ["cluster.local/ns/ashu-webapp/sa/bookinfo-productpage"]
