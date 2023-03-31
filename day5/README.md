@@ -202,6 +202,30 @@ telemetries                       telemetry    telemetry.istio.io/v1alpha1      
 
 ```
 
+### ok lets check from diff ns to access the same 
+
+```
+ashu@ip-172-31-32-172 ashu-application]$ kubectl  -n  ashu-app-access  exec -it  httpbin-65895fd745-cc8fx  -c istio-proxy  -- bash 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.cluster.local:9080
+curl: (56) Recv failure: Connection reset by peer
+istio-proxy@httpbin-65895fd745-cc8fx:/$ 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ 
+istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.cluster.local:9080
+curl: (56) Recv failure: Connection reset by peer
+istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.cluster.local:9080
+curl: (56) Recv failure: Connection reset by peer
+istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.cluster.local:9080
+curl: (56) Recv failure: Connection reset by peer
+istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.cluster.local:9080
+curl: (56) Recv failure: Connection reset by peer
+istio-proxy@httpbin-65895fd745-cc8fx:/$ curl http://productpage.ashu-webapp.svc.cluster.local:9080
+curl: (56) Recv failure: Connection reset by peer
+istio-proxy@httpbin-65895fd745-cc8fx:/$ 
+```
+
+
 
 
 
